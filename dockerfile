@@ -1,29 +1,38 @@
 # This Dockerfile is used to build an image containing Minecraft Tekkit
-FROM ubuntu:xenial
-MAINTAINER three52
+FROM openjdk:8u171-jre-alpine
+LABEL maintainer "three52"
 
-
-# Make sure the package repository is up to date.
-RUN apt update
-RUN apt -y upgrade
-
-#Install Java
-RUN apt install openjdk-8-jre-headless unzip wget  -y
+RUN apk add --no-cache -U \
+          openssl \
+          imagemagick \
+          lsof \
+          su-exec \
+          shadow \
+          bash \
+          curl iputils wget \
+          git \
+          jq \
+          mysql-client \
+          python python-dev py2-pip
+          
+RUN pip install mcstatus
+HEALTHCHECK CMD mcstatus localhost:$SERVER_PORT ping
 
 # Add user minecraft
-RUN adduser --quiet minecraft
-RUN chown -R minecraft /opt/tekkit
-
+RUN addgroup -g 1000 minecraft \
+  && adduser -Ss /bin/false -u 1000 -G minecraft -h /home/minecraft minecraft \
+  && mkdir -m 777 /data /mods /config /plugins \
+  && chown minecraft:minecraft /data /config /mods /plugins /home/minecraft
 
 #Download Tekkit Legends
 RUN wget -O /tmp/tekkit.zip http://servers.technicpack.net/Technic/servers/tekkit-legends/Tekkit_Legends_Server_v1.1.1.zip
-RUN unzip /tmp/tekkit.zip -d /opt/tekkit
-RUN chmod +x /opt/tekkit/start.sh
-RUN chown -R minecraft /opt/tekkit
+RUN unzip /tmp/tekkit.zip -d /data
+RUN chmod +x /data/start.sh
+RUN chown -R minecraft /data
 
-VOLUME ["/opt/tekkit"]
+VOLUME ["/data"]
 EXPOSE 25565
 
-WORKDIR /opt/tekkit
+WORKDIR /data
 USER minecraft
-ENTRYPOINT ["/bin/sh","/opt/tekkit/start.sh"]
+ENTRYPOINT ["/bin/sh","/data/start.sh"]
