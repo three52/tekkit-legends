@@ -27,8 +27,6 @@ RUN unzip /tmp/tekkit.zip -d /data
 RUN chmod +x /data/start.sh
 RUN chown -R minecraft /data
 
-ADD ./start.sh /data/start.sh
-
 VOLUME ["/data"]
 EXPOSE 25565
 
