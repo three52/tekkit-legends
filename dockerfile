@@ -1,6 +1,6 @@
 # This Dockerfile is used to build an image containing Minecraft Tekkit
-FROM ubuntu:trusty
-MAINTAINER Rizbe
+FROM ubuntu:xenial
+MAINTAINER three52
 
 
 # Make sure the package repository is up to date.
@@ -8,11 +8,10 @@ RUN apt update
 RUN apt -y upgrade
 
 #Install Java
-RUN apt install openjdk-7-jre-headless unzip wget  -y
+RUN apt install openjdk-8-jre-headless unzip wget  -y
 
 # Add user minecraft
 RUN adduser --quiet minecraft
-RUN mkdir /opt/tekkit
 RUN chown -R minecraft /opt/tekkit
 
 
