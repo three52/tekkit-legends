@@ -15,9 +15,6 @@ RUN apk add --no-cache -U \
           mysql-client \
           python python-dev py2-pip
           
-RUN pip install mcstatus
-HEALTHCHECK CMD mcstatus localhost:$SERVER_PORT ping
-
 # Add user minecraft
 RUN addgroup -g 1000 minecraft \
   && adduser -Ss /bin/false -u 1000 -G minecraft -h /home/minecraft minecraft \
@@ -29,6 +26,8 @@ RUN wget -O /tmp/tekkit.zip http://servers.technicpack.net/Technic/servers/tekki
 RUN unzip /tmp/tekkit.zip -d /data
 RUN chmod +x /data/start.sh
 RUN chown -R minecraft /data
+
+ADD ./start.sh /data/start.sh
 
 VOLUME ["/data"]
 EXPOSE 25565
