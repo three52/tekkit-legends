@@ -25,7 +25,6 @@ RUN addgroup -g 1000 minecraft \
 RUN wget -O /tmp/tekkit.zip http://servers.technicpack.net/Technic/servers/tekkit-legends/Tekkit_Legends_Server_v1.1.1.zip
 RUN unzip /tmp/tekkit.zip -d /data
 RUN chmod +x /data/start.sh
-RUN chown -R minecraft /data
 
 VOLUME ["/data"]
 EXPOSE 25565
