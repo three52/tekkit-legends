@@ -30,5 +30,4 @@ VOLUME ["/data"]
 EXPOSE 25565
 
 WORKDIR /data
-USER minecraft
 ENTRYPOINT ["/bin/sh","/data/start.sh"]
